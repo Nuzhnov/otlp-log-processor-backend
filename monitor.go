@@ -44,6 +44,7 @@ func newMonitor(duration time.Duration) *Monitor {
 func (m *Monitor) increment(ctx context.Context, attr string) {
 	// Use buffered channel as mutex to speed up
 	_, span := tracer.Start(ctx, "increment")
+	defer span.End()
 	span.SetAttributes(attribute.String("attributeValue", attr))
 	span.AddEvent("Acquiring lock")
 	m.mu <- struct{}{}
@@ -57,6 +58,7 @@ func (m *Monitor) printStats(ctx context.Context) {
 	lines := make([]string, 0)
 
 	_, span := tracer.Start(ctx, "print-stats")
+	defer span.End()
 
 	span.AddEvent("Acquiring lock")
 	// Read map under mutex
@@ -86,6 +88,7 @@ func (m *Monitor) IncrementByAttribute(ctx context.Context, req *collogspb.Expor
 	attrName := "unknown"
 
 	ctx, span := tracer.Start(ctx, "increment-by-attrirute")
+	defer span.End()
 
 	for _, resourceLog := range req.ResourceLogs {
 		// Check Resource-level attributes
@@ -124,6 +127,7 @@ func (m *Monitor) Run(ctx context.Context) {
 	ticker := time.NewTicker(m.duration)
 
 	ctx, span := tracer.Start(ctx, "monitoring-run")
+	defer span.End()
 	span.SetAttributes(attribute.String("Duration", m.duration.String()))
 
 	slog.Info("Starting monitoring...")

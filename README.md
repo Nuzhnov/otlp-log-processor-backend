@@ -21,7 +21,7 @@ go test ./...
 
 ## CLI attributes
 
-- <b>attrubute</b> - string. The name of attribute we're looking for
+- <b>attribute</b> - string. The name of attribute we're looking for
 - <b>duration</b> - duration. The duration of window in seconds (default 30s)
 - <b>listenAddr</b> - string The listen address (default "localhost:4317")
 - <b>maxReceiveMessageSize</b> - int The max message size in bytes the server can receive (default 16777216)
